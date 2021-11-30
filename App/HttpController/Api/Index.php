@@ -50,4 +50,12 @@ class Index extends Base
         $count = count($videoData);
         return $this->writeJson(Status::CODE_OK,"ok",$this->getPagingData($count,$videoData));
     }
+
+    public function video() {
+        $video = [
+            'id' => 1,
+            'name'=> 'video'
+        ];
+        return $this->writeJson(200, 'ok', $video);
+    }
 }

@@ -1,0 +1,2 @@
+# 启动框架
+php easyswoole server start
