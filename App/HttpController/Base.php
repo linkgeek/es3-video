@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\HttpController;
-
 
 use EasySwoole\Http\AbstractInterface\Controller;
 

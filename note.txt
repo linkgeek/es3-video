@@ -1,2 +1,13 @@
 # 启动框架
 php easyswoole server start
+
+# yaconf
+https://github.com/laruence/yaconf
+
+安装完成需要重启easyswoole服务
+
+
+composer require easyswoole/fast-cache
+
+
+composer require easyswoole/task

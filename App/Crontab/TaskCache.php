@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: zhang
- * Date: 2019/8/28
- * Email: zhangatle@gmail.com
- */
 
 namespace App\Crontab;
 
@@ -35,5 +29,9 @@ class TaskCache extends AbstractCronTask
     {
         $videoModel = new Video();
         $videoModel->setIndexVideo();
+    }
+
+    function onException(\Throwable $throwable, int $taskId, int $workerIndex) {
+        // TODO: Implement onException() method.
     }
 }

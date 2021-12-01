@@ -1,4 +1,5 @@
 <?php
+
 namespace App\HttpController;
 
 use App\Lib\AliyunSdk\AliVod;
@@ -7,11 +8,6 @@ use App\Utility\Pool\RedisPool;
 
 class Index extends Base
 {
-    function index()
-    {
-        var_dump(\Yaconf::get("aliyun.accessKeyId"));
-    }
-
     /**
      * 测试阿里云视频点播上传
      * @throws \ClientException

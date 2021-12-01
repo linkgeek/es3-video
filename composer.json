@@ -1,6 +1,7 @@
 {
     "require": {
-        "easyswoole/easyswoole": "3.4.x"
+        "easyswoole/easyswoole": "3.4.x",
+      "ext-json": "*"
     },
     "autoload": {
         "psr-4": {

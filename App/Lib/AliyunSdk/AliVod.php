@@ -1,29 +1,25 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: zhang
- * Date: 2019/8/28
- * Email: zhangatle@gmail.com
- */
 
 namespace App\Lib\AliyunSdk;
 
-require_once EASYSWOOLE_ROOT.'/App/Lib/AliyunSdk/aliyun-php-sdk-core/Config.php';
-require_once EASYSWOOLE_ROOT.'/App/Lib/AliyunSdk/aliyun-php-sdk-oss/autoload.php';
+require_once EASYSWOOLE_ROOT . '/App/Lib/AliyunSdk/aliyun-php-sdk-core/Config.php';
+require_once EASYSWOOLE_ROOT . '/App/Lib/AliyunSdk/aliyun-php-sdk-oss/autoload.php';
 
 use OSS\OssClient;
 use vod\Request\V20170321\CreateUploadVideoRequest;
 use vod\Request\V20170321\GetPlayInfoRequest;
 
-class AliVod
-{
+/**
+ * Class AliVod
+ * @package App\Lib\AliyunSdk
+ */
+class AliVod {
     public $regionId = "cn-shanghai";
     public $client;
     public $ossClient;
 
-    public function __construct()
-    {
-        $profile = \DefaultProfile::getProfile($this->regionId,\Yaconf::get("aliyun.accessKeyId"),\Yaconf::get("aliyun.accessKeySecret"));
+    public function __construct() {
+        $profile = \DefaultProfile::getProfile($this->regionId, \Yaconf::get("aliyun.accessKeyId"), \Yaconf::get("aliyun.accessKeySecret"));
         $this->client = new \DefaultAcsClient($profile);
     }
 
@@ -35,12 +31,13 @@ class AliVod
      * @return mixed|\SimpleXMLElement
      * @throws \ClientException
      * @throws \ServerException
+     * @throws \Exception
      */
-    public function createUploadVideo($title,$videoFileName,$other = []) {
+    public function createUploadVideo($title, $videoFileName, $other = []) {
         $request = new CreateUploadVideoRequest();
         $request->setTitle($title);
         $request->setFileName($videoFileName);
-        if(!empty($other['description'])){
+        if (!empty($other['description'])) {
             $request->setDescription($other['description']);
         }
         $request->setCoverURL("http://img.alicdn.com/tps/TB1qnJ1PVXXXXXCXXXXXXXXXXXX-700-700.png");
@@ -48,7 +45,7 @@ class AliVod
         $request->setAcceptFormat('JSON');
 
         $result = $this->client->getAcsResponse($request);
-        if(empty($request) || empty($result->VideoId)){
+        if (empty($request) || empty($result->VideoId)) {
             throw new \Exception('获取上传凭证不合法');
         }
         return $result;
@@ -60,9 +57,9 @@ class AliVod
      * @param $uploadAddress
      * @throws \OSS\Core\OssException
      */
-    public function initOssClient($uploadAuth,$uploadAddress){
-        $this->ossClient = new OssClient($uploadAuth['AccessKeyId'],$uploadAuth['AccessKeySecret'],$uploadAddress['Endpoint'],false,$uploadAuth['SecurityToken']);
-        $this->ossClient->setTimeout(86400*7);
+    public function initOssClient($uploadAuth, $uploadAddress) {
+        $this->ossClient = new OssClient($uploadAuth['AccessKeyId'], $uploadAuth['AccessKeySecret'], $uploadAddress['Endpoint'], false, $uploadAuth['SecurityToken']);
+        $this->ossClient->setTimeout(86400 * 7);
         $this->ossClient->setConnectTimeout(10);
     }
 
@@ -72,8 +69,8 @@ class AliVod
      * @param $localFile
      * @return mixed
      */
-    public function uploadLocalFile($uploadAddress,$localFile){
-        return $this->ossClient->uploadFile($uploadAddress['Bucket'],$uploadAddress['FileName'],$localFile);
+    public function uploadLocalFile($uploadAddress, $localFile) {
+        return $this->ossClient->uploadFile($uploadAddress['Bucket'], $uploadAddress['FileName'], $localFile);
     }
 
     /**
@@ -83,8 +80,8 @@ class AliVod
      * @throws \ClientException
      * @throws \ServerException
      */
-    public function getPlayInfo($videoId = 0){
-        if(empty($videoId)){
+    public function getPlayInfo($videoId = 0) {
+        if (empty($videoId)) {
             return [];
         }
         $request = new GetPlayInfoRequest();
