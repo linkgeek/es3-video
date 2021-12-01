@@ -11,6 +11,7 @@ use App\Crontab\TaskCache;
 use App\Utility\Pool\MysqlPool;
 use App\Utility\Pool\RedisPool;
 use EasySwoole\Component\Pool\PoolManager;
+use EasySwoole\EasySwoole\ServerManager;
 use EasySwoole\EasySwoole\Crontab\Crontab;
 
 use EasySwoole\Component\Di;

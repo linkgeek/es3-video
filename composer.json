@@ -1,7 +1,9 @@
 {
     "require": {
         "easyswoole/easyswoole": "3.4.x",
-      "ext-json": "*"
+      "ext-json": "*",
+        "easyswoole/fast-cache": "^2.0",
+        "easyswoole/task": "^1.1"
     },
     "autoload": {
         "psr-4": {
