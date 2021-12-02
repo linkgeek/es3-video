@@ -7,10 +7,10 @@ namespace EasySwoole\EasySwoole;
 use EasySwoole\EasySwoole\AbstractInterface\Event;
 use EasySwoole\EasySwoole\Swoole\EventRegister;
 
-use App\Crontab\TaskCache;
-use App\Utility\Pool\MysqlPool;
-use App\Utility\Pool\RedisPool;
-use EasySwoole\Component\Pool\PoolManager;
+//use App\Crontab\TaskCache;
+use App\Lib\Pool\MysqlPool;
+use App\Lib\Pool\RedisPool;
+use EasySwoole\Pool\Manager;
 use EasySwoole\EasySwoole\ServerManager;
 use EasySwoole\EasySwoole\Crontab\Crontab;
 
@@ -21,6 +21,8 @@ class EasySwooleEvent implements Event
     public static function initialize()
     {
         date_default_timezone_set('Asia/Shanghai');
+        //$dbConf = \Yaconf::get('mysql');
+        Manager::getInstance()->register(MysqlPool::class);
     }
 
     public static function mainServerCreate(EventRegister $register)
@@ -36,12 +38,15 @@ class EasySwooleEvent implements Event
             'charset' => 'utf8',
         ));
 
-        //PoolManager::getInstance()->register(MysqlPool::class);
+        Di::getInstance()->set('REDIS', \App\Lib\Redis\Redis::getInstance());
+        Di::getInstance()->set('ES', \App\Model\Es\EsClient::getInstance());
+
+        //Manager::getInstance()->register(MysqlPool::class);
         //PoolManager::getInstance()->register(RedisPool::class);
-        Crontab::getInstance()->addTask(TaskCache::class);
+        //Crontab::getInstance()->addTask(TaskCache::class);
         /**
          * ****************   缓存服务    ****************
          */
-        Cache::getInstance()->setTempDir(EASYSWOOLE_TEMP_DIR)->attachToServer(ServerManager::getInstance()->getSwooleServer());
+        //Cache::getInstance()->setTempDir(EASYSWOOLE_TEMP_DIR)->attachToServer(ServerManager::getInstance()->getSwooleServer());
     }
 }

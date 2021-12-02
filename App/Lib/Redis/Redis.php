@@ -2,7 +2,6 @@
 
 namespace App\Lib\Redis;
 
-use Composer\Config;
 use EasySwoole\Component\Singleton;
 
 class Redis {
@@ -21,7 +20,7 @@ class Redis {
             $res = $this->redis->connect($redisConfig['host'], $redisConfig['port'], $redisConfig['time_out']);
             $this->redis->auth($redisConfig['auth']);
         } catch (\Exception $e) {
-            throw new \Exception("redis服务异常");
+            throw new \Exception($e->getMessage());
         }
 
         if ($res === false) {

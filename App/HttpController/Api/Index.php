@@ -40,6 +40,6 @@ class Index extends Base {
             return $this->writeJson(Status::CODE_BAD_REQUEST, '请求失败');
         }
         $count = count($videoData);
-        return $this->writeJson(Status::CODE_OK, "ok", $this->getPagingData($count, $videoData));
+        return $this->writeJson(Status::CODE_OK, "ok", $this->getPaginateData($count, $videoData));
     }
 }

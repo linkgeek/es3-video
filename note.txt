@@ -11,3 +11,6 @@ composer require easyswoole/fast-cache
 
 
 composer require easyswoole/task
+
+
+"elasticsearch/elasticsearch": "^7.0"

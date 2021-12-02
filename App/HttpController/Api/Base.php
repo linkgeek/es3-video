@@ -25,13 +25,14 @@ class Base extends Controller {
     }
 
     /**
-     * @param $count
+     * @param $total
      * @param $data
      * @param int $isSplice
      * @return array
      */
-    public function getPagingData($count, $data, $isSplice = 1) {
-        $totalPage = ceil($count / $this->params['size']);
+    public function getPaginateData($total, $data, $isSplice = 1) {
+        $totalPage = ceil($total / $this->params['size']);
+        // 限制深度分页
         $maxPageSize = \Yaconf::get("base.maxPageSize");
         if ($totalPage > $maxPageSize) {
             $totalPage = $maxPageSize;
@@ -42,8 +43,8 @@ class Base extends Controller {
         }
         return [
             'total_page' => $totalPage,
-            'page_size'  => $this->params['page'],
-            'count'      => intval($count),
+            'page_size'  => $this->params['size'],
+            'count'      => intval($total),
             'lists'      => $data
         ];
     }

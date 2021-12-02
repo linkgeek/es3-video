@@ -4,7 +4,6 @@ namespace App\HttpController\Api;
 
 use App\Utility\Pool\RedisPool;
 use EasySwoole\EasySwoole\Logger;
-//use EasySwoole\EasySwoole\Swoole\Task\TaskManager;
 use EasySwoole\EasySwoole\Task\TaskManager;
 use EasySwoole\Http\Message\Status;
 use EasySwoole\Validate\Validate;
