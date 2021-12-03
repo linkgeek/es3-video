@@ -2,18 +2,23 @@
 
 namespace App\HttpController\Api;
 
-use App\Utility\Pool\RedisPool;
+use App\Lib\Pool\RedisPool;
+use App\Model\Es\EsVideo;
+use EasySwoole\Component\Di;
 use EasySwoole\EasySwoole\Logger;
 use EasySwoole\EasySwoole\Task\TaskManager;
 use EasySwoole\Http\Message\Status;
+use EasySwoole\Pool\Manager;
 use EasySwoole\Validate\Validate;
 use App\Model\Video as VideoModel;
+use phpDocumentor\Reflection\DocBlock\Tags\Reference\Url;
 
 class Video extends Base {
+
     public $logType = "video:";
 
     /**
-     * 添加视频
+     * 保存视频配置
      */
     public function add() {
         $params = $this->request()->getRequestParam();
@@ -33,27 +38,40 @@ class Video extends Base {
 
         $data = [
             'name'        => $params['name'],
-            'url'         => $params['url'],
-            'image'       => $params['image'],
-            'content'     => $params['content'],
             'cat_id'      => intval($params['cat_id']),
-            'create_time' => time(),
+            'image'       => $params['image'],
+            'url'         => $params['url'],
+            'type'        => 1,
+            'content'     => $params['content'],
             'uploader'    => 'test',
+            'create_time' => time(),
+            'update_time' => time(),
             'status'      => \Yaconf::get('status.normal'),
         ];
+        //print_r($data);
 
         try {
             $modelObj = new VideoModel();
-            $videoId = $modelObj->add($data);
+            $flag = $modelObj->add($data);
         } catch (\Exception $e) {
             return $this->writeJson(Status::CODE_BAD_REQUEST, $e->getMessage());
         }
 
-        if (empty($videoId)) {
-            return $this->writeJson(400, '提交视频有误', ['id' => 0]);
-
+        if (!$flag) {
+            return $this->writeJson(400, '提交视频有误');
         }
-        return $this->writeJson(200, 'OK', ['id' => $videoId]);
+
+        $redis1 = Manager::getInstance()->get('redis1')->getObj();
+        $id = $redis1->incr('VIDEO_AUTO_INCREMENT');
+        // 回收连接对象（将连接对象重新归还到连接池，方便后续使用）
+        Manager::getInstance()->get('redis1')->recycleObj($redis1);
+
+        // 同步存在ES
+        TaskManager::getInstance()->sync(function () use($id, $data) {
+            $response = (new EsVideo())->insertByName($id, $data);
+        });
+
+        return $this->writeJson(200, 'OK');
     }
 
     public function index() {

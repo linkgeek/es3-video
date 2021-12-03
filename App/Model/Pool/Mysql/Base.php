@@ -3,7 +3,7 @@
 namespace App\Model\Pool\Mysql;
 
 use App\Lib\Pool\MysqlObject;
-use App\Lib\Pool\MysqlPool;
+use App\Lib\Pool\MysqliPool;
 use EasySwoole\Pool\Manager;
 
 class Base {
@@ -11,7 +11,7 @@ class Base {
 
     public function __construct() {
         $timeout = \Yaconf::get("mysql.POOL_TIME_OUT");
-        $mysqlObject = Manager::getInstance()->getPool(MysqlPool::class)->getObj($timeout);
+        $mysqlObject = Manager::getInstance()->getPool(MysqliPool::class)->getObj($timeout);
         // 类型的判定
         if ($mysqlObject instanceof MysqlObject) {
             $this->db = $mysqlObject;
@@ -22,7 +22,7 @@ class Base {
 
     public function __destruct() {
         if ($this->db instanceof MysqlObject) {
-            Manager::getInstance()->getPool(MysqlPool::class)->recycleObj($this->db);
+            Manager::getInstance()->getPool(MysqliPool::class)->recycleObj($this->db);
             // 请注意 此处db是该链接对象的引用 即使操作了回收 仍然能访问
             // 安全起见 请一定记得设置为null 避免再次使用导致不可预知的问题
             $this->db = null;

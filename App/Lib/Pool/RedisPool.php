@@ -3,6 +3,10 @@
 namespace App\Lib\Pool;
 
 use EasySwoole\Pool\AbstractPool;
+use EasySwoole\Pool\Config;
+use EasySwoole\Redis\Config\RedisConfig;
+use EasySwoole\Redis\Redis;
+
 
 class RedisPool extends AbstractPool {
     protected $redisConfig;
@@ -17,19 +21,4 @@ class RedisPool extends AbstractPool {
         $redis = new Redis($this->redisConfig);
         return $redis;
     }
-
-    /*protected function createObject() {
-        // TODO: Implement createObject() method.
-        $redis = new RedisObject();
-        ///$conf = Config::getInstance()->getConf('REDIS');
-        $conf = \Yaconf::get("redis");
-        if ($redis->connect($conf['host'], $conf['port'])) {
-            if (!empty($conf['auth'])) {
-                $redis->auth($conf['auth']);
-            }
-            return $redis;
-        } else {
-            return null;
-        }
-    }*/
 }

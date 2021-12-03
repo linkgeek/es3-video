@@ -13,7 +13,8 @@ return [
         'SETTING' => [
             'worker_num' => 8,
             'reload_async' => true,
-            'max_wait_time' => 3
+            'max_wait_time' => 3,
+            'package_max_length' => 10 * 1024 * 1024 // 10m
         ],
         'TASK' => [
             'workerNum' => 4,
@@ -28,6 +29,16 @@ return [
         'logConsole' => true,
         'displayConsole' => true,
         'ignoreCategory' => []
+    ],
+    /******** Mysql 配置 *********/
+    'mysql' => [
+        'host' => '127.0.0.1',
+        'port' => '3306',
+        'user' => 'root',
+        'password' => 'giant0905',
+        'database' => 'es3_video',
+        'timeout' => 5,
+        'charset' => 'utf8mb4'
     ],
     'TEMP_DIR' => null
 ];

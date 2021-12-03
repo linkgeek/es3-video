@@ -8,7 +8,7 @@ use App\Lib\Utils;
  * upload 基类
  * @package App\Lib\Upload
  */
-class Base {
+class UploadBase {
 
     public $request = null;
     public $type = ''; //上传文件file-key，value: image|video|txt
@@ -39,12 +39,13 @@ class Base {
         $up_file = $this->request->getUploadedFile($this->type);
         $this->size = $up_file->getSize();
         $this->checkSize();
-        $fileName = $up_file->getClientFileName();
+        $fileName = $up_file->getClientFilename();
         $this->clientMediaType = $up_file->getClientMediaType();
         $this->checkMediaType();
         $file = $this->getFile($fileName);
-        $flag = $up_file->moveTo($file);
-        if (!empty($flag)) {
+        $up_file->moveTo($file);
+        $errCode = $up_file->getError();
+        if ($errCode == 0) {
             return $this->file;
         }
         return false;
@@ -58,14 +59,14 @@ class Base {
     public function getFile($fileName) {
         $pathInfo = pathinfo($fileName);
         $extension = $pathInfo['extension'];
-        $dirname = "/" . $this->type . "/" . date("Y") . "/" . date("m");
-        $dir = EASYSWOOLE_ROOT . "/public" . $dirname;
-        if (!is_dir($dir)) {
-            mkdir($dir, 0777, true);
+        $dirname = "/public/" . $this->type . "/" . date("Y") . "/" . date("m");
+        $dir = EASYSWOOLE_ROOT;
+        if (!is_dir($dir . $dirname)) {
+            mkdir($dir . $dirname, 0777, true);
         }
-        $basename = "/" . Utils::getFileKey($fileName) . "." . $extension;
-        $this->file = $dirname . $basename;
-        return $this->file;
+        $basename = $dirname . "/" . Utils::getFileKey($fileName) . "." . $extension;
+        $this->file = $basename;
+        return $dir . $basename;
     }
 
     /**

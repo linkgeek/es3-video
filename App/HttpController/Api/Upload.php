@@ -8,6 +8,7 @@ use App\Lib\ClassArr;
  * 文件上传
  */
 class Upload extends Base {
+
     /**
      * 文件上传处理
      * @return bool

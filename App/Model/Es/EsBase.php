@@ -46,4 +46,21 @@ class EsBase {
         $res = $this->esClient->search($param);
         return $res;
     }
+
+    public function insertByName($id, $data) {
+        if (!$id || empty($data)) {
+            return [];
+        }
+
+        $param = [
+            'index' => $this->index,
+            'type'  => $this->type,
+            'id'    => $id,
+            'body'  => $data,
+        ];
+
+        $res = $this->esClient->create($param);
+        return $res;
+    }
+
 }

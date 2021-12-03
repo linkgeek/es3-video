@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use App\Utility\Pool\RedisPool;
+use App\Lib\Pool\RedisPool;
 use EasySwoole\FastCache\Cache;
 
 class Video extends Base {

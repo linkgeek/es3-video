@@ -3,8 +3,6 @@
 namespace App\HttpController;
 
 use App\Lib\AliyunSdk\AliVod;
-use App\Utility\Pool\MysqlPool;
-use App\Utility\Pool\RedisPool;
 
 class Index extends Base
 {
